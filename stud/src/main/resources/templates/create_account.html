@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+</head>
+<body>
+<nav class="navbar navbar-light bg-light ">
+    <div class="row">
+        <div class="col-2"> </div>
+        <div class="col">
+            <span class="navbar navbar-expand-lg navbar-light bg-ligh"><div class="navbar-brand "> Dummy Bank </div></span>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="container">
+    <form th:action="@{/bank/save-account}" th:object="${bank}" method="post">
+        <div class="row">
+            <div class="col-3">
+                Enter Name:
+            </div>
+            <div class="col-9">
+                <input type="text" name="name" th:field="*{name}" class="form-control"/>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-3">
+                Enter balance:
+            </div>
+            <div class="col-9">
+                <input type="text" name="balance" th:field="*{balance}" class="form-control" />
+
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-3">
+                Enter password:
+            </div>
+            <div class="col-9">
+                <input type="password" class="form-control" th:field="*{password}">
+            </div>
+            <br>
+            <input type="submit" value="submit" class="btn btn-primary">
+        </div>
+
+
+
+    </form>
+</div>
+
+
+</body>
+</html>
