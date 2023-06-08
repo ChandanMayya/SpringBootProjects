@@ -1,0 +1,16 @@
+server:
+  port: 9000
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: loginService
+          uri: http://localhost:9002/
+          predicates:
+          - Path=/ecommerce/login/**
+        - id: orderService
+          uri: http://localhost:9003/
+          predicates:
+          - Path=/ecommerce/order/**
+
