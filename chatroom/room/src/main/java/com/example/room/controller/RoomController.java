@@ -12,6 +12,10 @@ public class RoomController {
     public String listRooms(){
         return null;
     }
+//    @GetMapping("/listRooms/{userId}")
+//    public String viewRooms(){
+//        return null;
+//    }
     @GetMapping("/view/{id}")
     public String viewRoom(){
         return null;
