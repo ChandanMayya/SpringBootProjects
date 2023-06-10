@@ -4,6 +4,7 @@ import com.example.room.dto.RoomDto;
 import com.example.room.entity.Room;
 import com.example.room.service.RoomService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +32,12 @@ public class RoomController {
     public Room viewRoom(int id){
         return service.viewRoom(id);
     }
-    @GetMapping("/enter/{id}")
-    public String enterRoom(){
-        return null;        //not yet implemented roomUsers..
+    @GetMapping("/join")
+    public void joinRoom(HttpServletRequest request, HttpSession session){
+        int roomId = Integer.parseInt(request.getParameter("roomId"));
+//      int userId = (int) session.getAttribute("userId");
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        service.joinRoom(userId,roomId);
     }
     @PostMapping("/save")
     public void createRoom(HttpServletRequest request){
