@@ -6,12 +6,15 @@ import com.example.message.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MessageService {
     @Autowired
     MessageRepository repository;
-    public String  messageList(){
-        return "message";
+    public List<Message> messageList(){
+        List<Message> messageList = repository.findAll();
+        return messageList;
     }
     public boolean saveMessage(MessageDto messageDto) {
         try {
