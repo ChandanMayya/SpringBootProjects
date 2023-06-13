@@ -119,19 +119,22 @@
     <!-- Container wrapper -->
 </nav>
 <!-- Navbar -->
-<form th:action="@{/room/view}" method="GET">
+
     <div class="container">
         <div class="row">
-            <div class="col-lg-4" th:each="book, itemStat : *{rooms}">
+            <div class="col-lg-4" th:each="room : *{rooms}">
+                <form th:action="@{/room/view}" method="get">
                     <div class="square">
                         <i class="fa fa-user" aria-hidden="true"></i>
-                        <h3 th:text="${book.getRoomName()}"></h3>
-                        <h4 th:text="${book.getRoomDescription()}"></h4>
+                        <input type="hidden" th:id="roomId" th:name="roomId" th:value="${room.getRoomId()}">
+                        <h3 th:text="${room.getRoomName()}" th:name="roomName"></h3>
+                        <h4 th:text="${room.getRoomDescription()}"></h4>
+                        <input type="submit" class="btn btn-primary" value="View">
                     </div>
+                </form>
             </div>
         </div>
     </div>
-</form>
 
 
 </body>

@@ -38,8 +38,14 @@ public class RoomController {
         return modelAndView;
     }
     @GetMapping("/view")
-    public Room viewRoom(int id){
-        return service.viewRoom(id);
+    public ModelAndView viewRoom(HttpServletRequest request, Model model){
+        int id = Integer.parseInt(request.getParameter("roomId"));
+        System.out.println(request.getParameter("roomName"));
+        Room room = service.viewRoom(id);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("viewRoom");
+        model.addAttribute("room",room);
+        return modelAndView;
     }
     @GetMapping("/join")
     public void joinRoom(HttpServletRequest request, HttpSession session){
