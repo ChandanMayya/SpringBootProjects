@@ -21,6 +21,8 @@ public class Message {
     private int id;
     @Column(name = "ROOM_ID")
     private int roomId;
+    @Column(name = "USER_ID")
+    private int userId;
     @Column(name = "MESSAGE")
     private String messageTxt;
     @Column(name = "LOGGED_TIME")

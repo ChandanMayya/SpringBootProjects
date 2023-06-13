@@ -1,4 +1,4 @@
-package com.example.message.dto;
+package com.example.room.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,11 +14,7 @@ import java.util.Date;
 public class MessageDto {
     private int id;
     private int roomId;
-    private int userId;
     private String userName;
     private String message;
-    private Date time;
-
-    public MessageDto(int id, int roomId, int userId, String messageTxt, Date date) {
-    }
+    private String time;
 }

@@ -1,5 +1,6 @@
 package com.example.room.controller;
 
+import com.example.room.dto.MessageDto;
 import com.example.room.dto.RoomDto;
 import com.example.room.entity.Room;
 import com.example.room.service.RoomService;
@@ -75,7 +76,15 @@ public class RoomController {
         }
         System.out.println("Error in saving room!");
         return null;
-
-
+     }
+     @GetMapping("/chat")
+     public ModelAndView message(HttpServletRequest request, Model model,HttpSession session){
+        //session.setAttribute("roomId",request.getParameter("roomId"));
+        //session.setAttribute("roomId",1001);
+        int roomId = 1001;
+         List<MessageDto> messages = service.getMessage(roomId);
+        ModelAndView modelAndView = new ModelAndView("messages");
+        model.addAttribute("messages",messages);
+        return modelAndView;
      }
 }
