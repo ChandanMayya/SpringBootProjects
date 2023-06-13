@@ -56,10 +56,20 @@ public class RoomController {
     }
 
     @PostMapping("/save")
-    public void createRoom(HttpServletRequest request){
+    public ModelAndView createRoom(HttpServletRequest request){
         String roomName = request.getParameter("roomName");
         String roomDescription = request.getParameter("roomDescription");
         RoomDto roomDto = new RoomDto(roomName,roomDescription,new Date());
-        service.saveRoom(roomDto);
+        Boolean flag = false;
+        ModelAndView modelAndView = new ModelAndView();
+        flag = service.saveRoom(roomDto);
+        if (flag){
+            modelAndView.setViewName("roomHome");
+            return modelAndView;
+        }
+        System.out.println("Error in saving room!");
+        return null;
+
+
      }
 }
