@@ -13,4 +13,10 @@ public class RoomDto {
     private String roomName;
     private String roomDescription;
     private Date createdDate;
+
+    public RoomDto (String roomName, String roomDescription, Date createdDate){
+        this.roomDescription = roomDescription;
+        this.roomName = roomName;
+        this.createdDate = createdDate;
+    }
 }

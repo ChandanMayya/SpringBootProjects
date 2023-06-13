@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "ROOMS")
 public class Room {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private int roomId;
     @Column(name = "ROOM_NAME")
@@ -25,4 +25,9 @@ public class Room {
     private String roomDescription;
     @Column(name = "CREATED_DATE")
     private Date createdDate;
+    public Room(String roomName, String roomDescription, Date createdDate){
+        this.createdDate = createdDate;
+        this.roomDescription = roomDescription;
+        this.roomName = roomName;
+    }
 }

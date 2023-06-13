@@ -28,7 +28,6 @@ public class RoomService {
     public Boolean saveRoom(RoomDto roomDto){
         try {
             Room room = new Room(
-                    roomDto.getRoomId(),
                     roomDto.getRoomName(),
                     roomDto.getRoomDescription(),
                     roomDto.getCreatedDate()

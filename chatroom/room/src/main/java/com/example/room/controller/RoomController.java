@@ -57,10 +57,9 @@ public class RoomController {
 
     @PostMapping("/save")
     public void createRoom(HttpServletRequest request){
-        int roomId = Integer.parseInt(request.getParameter("roomId"));
         String roomName = request.getParameter("roomName");
         String roomDescription = request.getParameter("roomDescription");
-        RoomDto roomDto = new RoomDto(roomId,roomName,roomDescription,new Date());
+        RoomDto roomDto = new RoomDto(roomName,roomDescription,new Date());
         service.saveRoom(roomDto);
      }
 }
