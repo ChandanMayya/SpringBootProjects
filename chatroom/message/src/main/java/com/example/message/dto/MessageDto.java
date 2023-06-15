@@ -21,4 +21,11 @@ public class MessageDto {
 
     public MessageDto(int id, int roomId, int userId, String messageTxt, Date date) {
     }
+    public MessageDto(int roomId,int userId, String userName, String message, Date time){
+        this.roomId = roomId;
+        this.userId = userId;
+        this.userName = userName;
+        this.message = message;
+        this.time = time;
+    }
 }

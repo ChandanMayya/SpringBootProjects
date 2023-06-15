@@ -28,13 +28,14 @@ public class MessageController {
         return service.messageList( Integer.parseInt(roomId),userId);
     }
     @PostMapping("/save")
-    public void saveMessage(HttpServletRequest request, HttpSession session){
-        int id = Integer.parseInt(request.getParameter("userId"));
-        int roomId = Integer.parseInt(request.getParameter("roomId"));
+    public void saveMessage(@RequestBody TextRequest textRequest ,HttpServletRequest request, HttpSession session){
+        System.out.println("Enan leide!");
+        int id = 1;   //Integer.parseInt(request.getParameter("userId"));
+        int roomId = 1001;   ///Integer.parseInt(request.getParameter("roomId"));
         //int userId = Integer.parseInt(String.valueOf(session.getAttribute("userId")));   //This will be used after implementing authentication
         int userId = 1;
-        String messageTxt = request.getParameter("message");
-        MessageDto message = new MessageDto(id,roomId,userId,messageTxt,new Date());
+        String messageTxt = textRequest.getText();
+        MessageDto message = new MessageDto(roomId,userId,"Dummy",messageTxt,new Date());
         if (service.saveMessage(message))
             System.out.println("Success");
         else
