@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message,Integer> {
-    @Query("SELECT m FROM Message m WHERE m.roomId = :roomId AND m.userId = :userId order by m.id DESC ")
+    @Query("SELECT m FROM Message m WHERE m.roomId = :roomId AND m.userId = :userId ")
     List<Message> findAllByRoomIdAndUserId(@Param("roomId") int roomId, @Param("userId") int userId);
 }
