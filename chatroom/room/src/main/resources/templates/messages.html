@@ -98,11 +98,10 @@ $(document).ready(function (){
     // }
 });
 </script>
-<!--<script src="../templates/content_loader.js"></script>-->
 
 <script>
-    messageBuilder();
-function messageBuilder() {
+    messageBuilder("Shankare","19-06-2023 @ 05:18 PM","tryambakam yajamahet sukhandim pustivardhanam urvarukamivavandanat maammrutyurmikshiyamaamrdaat om");
+function messageBuilder(name,time,messageContent) {
     var rootDiv = document.createElement("div");
     rootDiv.setAttribute("id", "userName");
     rootDiv.setAttribute("class", "d-flex justify-content-between");
@@ -110,13 +109,13 @@ function messageBuilder() {
     var userNameText = document.createElement("p");
     userNameText.setAttribute("id", "userName");
     userNameText.setAttribute("class", "small mb-1");
-    var unametext = document.createTextNode("Shankare");
+    var unametext = document.createTextNode(name);
     userNameText.appendChild(unametext);
 
     var timeText = document.createElement("p");
     timeText.setAttribute("id", "time");
     timeText.setAttribute("class", "small mb-1 text-muted");
-    var timeBody = document.createTextNode("just now");
+    var timeBody = document.createTextNode(time);
     timeText.appendChild(timeBody);
 
     rootDiv.appendChild(userNameText);
@@ -134,7 +133,7 @@ function messageBuilder() {
     var message = document.createElement("p");
     message.setAttribute("class", "small p-2 ms-3 mb-3 rounded-3");
     message.setAttribute("style", "background-color: #f5f6f7;");
-    var msgBody = document.createTextNode("tryambakam yajamahet sukhandim pustivardhanam urvarukamivavandanat maammrutyurmikshiyamaamrdaat om");
+    var msgBody = document.createTextNode(messageContent);
     message.appendChild(msgBody);
 
     containerDiv.appendChild(image);
