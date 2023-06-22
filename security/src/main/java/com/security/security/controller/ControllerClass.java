@@ -21,4 +21,8 @@ public class ControllerClass {
     public List<String> listUsers(){
         return userService.fetchUsers();
     }
+    @GetMapping("/normal/name")
+    public String getName(){
+        return "Hello User";
+    }
 }
