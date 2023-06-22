@@ -16,6 +16,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="demo" target="1.5" />
+      <module name="ROOM" target="17" />
+      <module name="USER" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

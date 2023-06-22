@@ -22,8 +22,9 @@
                             <i class="fas fa-times text-muted fa-xs"></i>
                         </div>
                     </div>
-                    <div class="card-body" data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px" id="messageBody">
-                    <span th:each="message : *{messages}">
+                    <div class="card-body overflow-scroll hover-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 500px; overflow: auto; flex-direction: column-reverse;" id="messageBody">
+
+<!--                    <span th:each="message : *{messages}">-->
 
 <!--                        <div class="d-flex justify-content-between">-->
 <!--                            <p class="small mb-1" th:text="${message.getUserName()}"></p>-->
@@ -36,7 +37,7 @@
 <!--                                <p class="small p-2 ms-3 mb-3 rounded-3" style="background-color: #f5f6f7;" th:text="${message.getMessage()}"></p>-->
 <!--                            </div>-->
 <!--                        </div>-->
-                        </span>
+<!--                        </span>-->
 
                     </div>
                     <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
@@ -62,9 +63,9 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 
-</html>
 
-<script>
+
+<script th:inline="javascript">
 $(document).ready(function (){
     $('#button-addon2').click(function (){
         let message = $("#messageText").val();
@@ -85,6 +86,24 @@ $(document).ready(function (){
         });
     });
 
+    var interval = 1000;
+    var roomId = 1001;
+    function fetchData() {
+        $.ajax({
+            url: "/message/pull/" + roomId,
+            type: "GET",
+            success: function (response) {
+                $("#messageBody").empty();
+                for (const message of response){
+                    console.log(message)
+                    messageBuilder(message['userName'],message['time'],message['message'])
+                }
+
+            }
+        })
+    }
+    setInterval(fetchData,interval)
+
     // var interval = 5000;
     // var roomId = 1001;
     // function fetchData(){
@@ -100,7 +119,7 @@ $(document).ready(function (){
 </script>
 
 <script>
-    messageBuilder("Shankare","19-06-2023 @ 05:18 PM","tryambakam yajamahet sukhandim pustivardhanam urvarukamivavandanat maammrutyurmikshiyamaamrdaat om");
+  //  messageBuilder("Shankare","19-06-2023 @ 05:18 PM","tryambakam yajamahet sukhandim pustivardhanam urvarukamivavandanat maammrutyurmikshiyamaamrdaat om");
 function messageBuilder(name,time,messageContent) {
     var rootDiv = document.createElement("div");
     rootDiv.setAttribute("id", "userName");
@@ -147,3 +166,4 @@ function messageBuilder(name,time,messageContent) {
 }
 
 </script>
+</html>
