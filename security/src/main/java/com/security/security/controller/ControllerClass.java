@@ -2,6 +2,7 @@ package com.security.security.controller;
 
 import com.security.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,5 +25,10 @@ public class ControllerClass {
     @GetMapping("/normal/name")
     public String getName(){
         return "Hello User";
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin")
+    public String getAdmin(){
+        return "Hello Admin";
     }
 }
