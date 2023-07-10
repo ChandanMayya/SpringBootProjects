@@ -6,7 +6,11 @@
 </head>
 <body>
 ViewRoom
-<p th:text="${room}"></p>
+<h1 th:text="${room.getRoomName()}"></h1>
+<h3 th:text="${room.getRoomDescription()}"></h3>
+<h6 th:text="${room.getCreatedDate()}"></h6>
+<a th:href="messages.html">Open Room</a>
+
 
 </body>
 </html>

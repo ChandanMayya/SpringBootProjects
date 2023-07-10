@@ -4,6 +4,7 @@ import com.example.room.dto.MessageDto;
 import com.example.room.dto.RoomDto;
 import com.example.room.entity.Room;
 import com.example.room.service.RoomService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/room")
@@ -32,15 +32,28 @@ public class RoomController {
 //        return null;
 //    }
     @GetMapping("/roomHome")
-    public ModelAndView roomHome(Model model){
+    public ModelAndView roomHome(Model model,HttpServletRequest request, HttpSession session){
+        final Cookie[] cookies = request.getCookies();
+        String userName = "keshava";
+//        for (Cookie cookie : cookies){
+//            if (Objects.equals(cookie.getName(), "userName"))
+//                userName = cookie.getValue();
+//        }
+
+        if (userName == null || userName.isEmpty() || userName.equals("")){
+            return new ModelAndView("redirect:http://localhost:9000/user/?formRoom=" + true);
+        }
+        session.setAttribute("userName", userName);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("roomHome");
         model.addAttribute("rooms", service.listRooms());
         return modelAndView;
     }
     @GetMapping("/view")
-    public ModelAndView viewRoom(HttpServletRequest request, Model model){
+    public ModelAndView viewRoom(HttpServletRequest request, Model model, HttpSession session){
         int id = Integer.parseInt(request.getParameter("roomId"));
+        if (session.getAttribute("userName") != null)
+            System.out.println(session.getAttribute("userName"));
         System.out.println(request.getParameter("roomName"));
         Room room = service.viewRoom(id);
         ModelAndView modelAndView = new ModelAndView();
