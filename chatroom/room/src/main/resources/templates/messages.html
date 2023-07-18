@@ -57,6 +57,7 @@
 
     </div>
 </section>
+<input type="hidden" th:value="${roomId}" id="room">
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -67,12 +68,15 @@
 
 <script th:inline="javascript">
 $(document).ready(function (){
+
+    var roomId = $("#room").val();
+
     $('#button-addon2').click(function (){
         let message = $("#messageText").val();
         console.log(message);
 
         $.ajax({
-            url: '/message/save',
+            url: '/message/save?roomId='+roomId,
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({text: message}),
@@ -87,7 +91,10 @@ $(document).ready(function (){
     });
 
     var interval = 1000;
-    var roomId = 1001;
+
+
+    console.log(roomId);
+
     function fetchData() {
         $.ajax({
             url: "/message/pull/" + roomId,
@@ -99,6 +106,8 @@ $(document).ready(function (){
                     messageBuilder(message['userName'],message['time'],message['message'])
                 }
 
+            },error: function (error){
+                console.log(error);
             }
         })
     }

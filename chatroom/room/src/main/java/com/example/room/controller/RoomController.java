@@ -9,10 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
@@ -49,10 +46,9 @@ public class RoomController {
         model.addAttribute("rooms", service.listRooms());
         return modelAndView;
     }
-    @GetMapping("/view")
-    public ModelAndView viewRoom(HttpServletRequest request, Model model, HttpSession session){
-        int id = Integer.parseInt(request.getParameter("roomId"));
-        if (session.getAttribute("userName") != null)
+    @GetMapping("/view/{roomId}")
+    public ModelAndView viewRoom(@PathVariable("roomId") int id, HttpServletRequest request, Model model, HttpSession session){
+      if (session.getAttribute("userName") != null)
             System.out.println(session.getAttribute("userName"));
         System.out.println(request.getParameter("roomName"));
         Room room = service.viewRoom(id);
@@ -90,14 +86,19 @@ public class RoomController {
         System.out.println("Error in saving room!");
         return null;
      }
-     @GetMapping("/chat")
-     public ModelAndView message(HttpServletRequest request, Model model,HttpSession session){
+     @GetMapping("/chat/{roomId}")
+     public ModelAndView message(@PathVariable("roomId") int roomId, HttpServletRequest request, Model model,HttpSession session){
         //session.setAttribute("roomId",request.getParameter("roomId"));
         //session.setAttribute("roomId",1001);
-        int roomId = 1001;
-         List<MessageDto> messages = service.getMessage(roomId);
+          List<MessageDto> messages = service.getMessage(roomId);
         ModelAndView modelAndView = new ModelAndView("messages");
         model.addAttribute("messages",messages);
+        model.addAttribute("roomId",roomId);
         return modelAndView;
+     }
+     @GetMapping("/landing/{userId}")
+     public ModelAndView landing(@PathVariable("userId") String  userId, HttpSession session){
+        session.setAttribute("userId",userId);
+        return new ModelAndView("roomHome");
      }
 }

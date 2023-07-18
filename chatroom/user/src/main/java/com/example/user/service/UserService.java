@@ -6,8 +6,6 @@ import com.example.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class UserService {
     @Autowired
@@ -17,8 +15,8 @@ public class UserService {
         try {
             User user = new User(
                     userDto.getUserName(),
-                    userDto.getPassword(),
                     userDto.getUserDescription(),
+                    userDto.getPassword(),
                     userDto.getJoinedDate()
             );
             repository.save(user);
@@ -27,15 +25,10 @@ public class UserService {
             return;
         }
     }
-    public User validateUser(String userName, String password){
-        try {
-            List<User> userList = repository.findAll();
-            for (User user : userList)
-                if (user.getUserName().equals(userName) && user.getPassword().equals(password))
-                    return user;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
+    public User checkUser(String userName, String password){
+        User user = repository.findByUserName(userName);
+        if (user.getPassword().equals(password))
+            return user;
+        return  null;
     }
 }

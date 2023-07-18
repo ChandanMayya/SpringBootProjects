@@ -10,16 +10,14 @@ import java.util.Date;
 public class UserDto {
     private int id;
     private String userName;
-
-    private String password;
-
     private String userDescription;
+    private String password;
     private Date joinedDate;
 
-    public UserDto(String userName, String password, String userDescription, Date joinedDate){
+    public UserDto(String userName, String userDescription, String password, Date joinedDate){
         this.userName = userName;
-        this.password = password;
         this.userDescription = userDescription;
+        this.password = password;
         this.joinedDate = joinedDate;
     }
 }
