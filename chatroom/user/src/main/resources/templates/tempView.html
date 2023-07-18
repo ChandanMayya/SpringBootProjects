@@ -6,12 +6,14 @@
 </head>
 <body>
 <input type="hidden" th:value="${user.getId()}" id="idHolder">
+<input type="hidden" th:value="${user.getUserName()}" id="nameHolder">
 </body>
 </html>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function (){
         let userId = $("#idHolder").val()
-        window.location.href = "http://localhost:9000/room/landing/"+userId;
+        let userName = $("#nameHolder").val()
+        window.location.href = "http://localhost:9000/room/landing/"+userId+"/"+userName;
     })
 </script>

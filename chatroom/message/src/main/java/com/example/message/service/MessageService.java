@@ -7,7 +7,10 @@ import com.example.message.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,7 +19,12 @@ public class MessageService {
     MessageRepository repository;
     @Autowired
     UserRepository userRepository;
-    public List<MessageDto> messageList(int roomId){
+    public List<MessageDto> messageList(int roomId) throws ParseException {
+
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy @ hh-mm a");
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        Date date;
+
         List<Message> messagesList = repository.findAllByRoomIdAndUserId(roomId);
         List<MessageDto> messageDto = new ArrayList<>();
         for (Message message: messagesList) {
@@ -25,7 +33,8 @@ public class MessageService {
             messageDto1.setRoomId(message.getRoomId());
             messageDto1.setUserId(message.getUserId());
             messageDto1.setMessage(message.getMessageTxt());
-            messageDto1.setTime(message.getLoggedTime());
+           // date = ;
+            messageDto1.setTime(outputFormat.parse(String.valueOf(inputFormat.parse(String.valueOf(message.getLoggedTime())))));
             messageDto1.setUserName(userRepository.fetchUserById(message.getUserId()).getUserName());
             messageDto.add(messageDto1);
         }

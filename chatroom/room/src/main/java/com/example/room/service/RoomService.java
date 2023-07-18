@@ -71,12 +71,16 @@ public class RoomService {
         }
     }
     public List<MessageDto> getMessage(int roomId){
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy @ hh-mm a");
+
+        Date date;
+
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<String > responseEntity = restTemplate.exchange("http://localhost:9000/message/pull/{roomId}", HttpMethod.GET,requestEntity, String.class,roomId);
         String responseBody = responseEntity.getBody();
-//        assert responseBody != null;
-//        System.out.println(Arrays.toString(responseBody.split(",")));
         List<MessageDto> messagesDto = new ArrayList<>();
 
         try{
@@ -88,17 +92,14 @@ public class RoomService {
                 message.setId(jsonObject.get("id").asInt());
                 message.setRoomId(jsonObject.get("roomId").asInt());
                 message.setUserName(jsonObject.get("userName").asText());
+                date = inputFormat.parse(jsonObject.get("time").asText());
                 message.setMessage(jsonObject.get("message").asText());
-                message.setTime(jsonObject.get("time").asText());
+                message.setTime(outputFormat.format(date));
                 messagesDto.add(message);
             }
-        } catch (JsonMappingException e) {
+        } catch (ParseException | JsonProcessingException e) {
             throw new RuntimeException(e);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-//       } catch (ParseException e) {
-//            throw new RuntimeException(e);
-       }
+        }
 
         return messagesDto;
     }

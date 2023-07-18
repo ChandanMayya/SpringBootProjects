@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="mb-4">Create Account</h2>
+      <form method="post" action="/user/create">
+        <div class="mb-3">
+          <label for="userName" class="form-label">Username:</label>
+          <input type="text" class="form-control" id="userName" name="userName" required>
+          <div class="invalid-feedback" id="userNameError">User name already exists.</div>
+        </div>
+        <div class="mb-3">
+          <label for="userDescription" class="form-label">User Description:</label>
+          <textarea class="form-control" id="userDescription" name="userDescription" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3" id="password-validation-message"></div>
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirm Password:</label>
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+        </div>
+        <div class="mb-3" id="confirm-password-validation-message"></div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Create Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+</body>
+</html>
+<script>
+  $(document).ready(function() {
+
+    function updateSubmitButton() {
+      var userName = $("#userName").val();
+      var userDescription = $("#userDescription").val();
+      var password = $("#password").val();
+      var confirmPassword = $("#confirmPassword").val();
+      const userNameErrorVisible = $("#userNameError").is(":visible")
+
+      // Regular expression to match alphanumeric characters and minimum length of 5 for password
+      var passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{5,}$/;
+
+      // Check all conditions for enabling/disabling submit button
+      if (userName.trim() !== "" && userDescription.trim() !== "" && password === confirmPassword && passwordPattern.test(password) && !(userNameErrorVisible)) {
+        $("#submitBtn").prop("disabled", false); // Enable the submit button
+      } else {
+        $("#submitBtn").prop("disabled", true); // Disable the submit button
+      }
+    }
+
+    // Bind keyup events for all fields to trigger validation
+    $("#userName, #userDescription, #password, #confirmPassword").keyup(function() {
+      updateSubmitButton();
+    });
+
+    // Function to validate the password field on keyup
+    $("#password").keyup(function() {
+      var password = $(this).val();
+
+      $("#confirmPassword").val("");
+      $("#confirm-password-validation-message").text("");
+
+      // Regular expression to match alphanumeric characters and minimum length of 5
+      var passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{5,}$/;
+
+      if (passwordPattern.test(password)) {
+        // Password is valid, display success message
+        $("#password-validation-message").removeClass("text-danger").addClass("text-success");
+        $("#password-validation-message").text("Password is valid.");
+      } else {
+        // Password is invalid, display error message
+        $("#password-validation-message").removeClass("text-success").addClass("text-danger");
+        $("#password-validation-message").text("Password must be alphanumeric and at least 5 characters long.");
+      }
+    });
+
+    $("#confirmPassword").keyup(function (){
+      if ($("#password").val() === $("#confirmPassword").val()){
+        $("#confirm-password-validation-message").removeClass("text-danger").addClass("text-success");
+        $("#confirm-password-validation-message").text("Password match");
+      }
+      else {
+        $("#confirm-password-validation-message").removeClass("text-success").addClass("text-danger");
+        $("#confirm-password-validation-message").text("Passwords does not match");
+      }
+    })
+
+
+    // Function to check if the user name exists
+    function checkUserNameAvailability() {
+      const userName = $("#userName").val();
+
+      // Perform AJAX call to the Spring Boot controller
+      $.ajax({
+        type: "GET",
+        url: "/user/checkUserNameAvailability",
+        data: { userName: userName },
+        success: function(response) {
+          if (response === true) {
+            // User name exists, show error message and disable submit button
+            $("#userName").addClass("is-invalid");
+            $("#userNameError").show();
+            $("#submitBtn").prop("disabled", true);
+          } else {
+            // User name does not exist, hide error message and enable submit button
+            $("#userName").removeClass("is-invalid");
+            $("#userNameError").hide();
+            updateSubmitButton();
+          }
+        },
+        error: function() {
+          // Handle error response from the server
+          console.log("Error while checking user name availability.");
+        }
+      });
+    }
+
+    // Bind keyup event for the userName field to trigger userName validation
+    $("#userName").keyup(function() {
+      checkUserNameAvailability();
+    });
+
+
+  });
+</script>

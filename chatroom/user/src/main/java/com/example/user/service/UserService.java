@@ -31,4 +31,9 @@ public class UserService {
             return user;
         return  null;
     }
+
+    public boolean isUserNameTaken(String userName) {
+        User existingUser = repository.findByUserName(userName);
+        return existingUser != null;
+    }
 }

@@ -156,11 +156,13 @@ public class RoomController {
         model.addAttribute("messages", messages);
         model.addAttribute("roomId", roomId);
         model.addAttribute("userId", userId);
+        model.addAttribute("userName",session.getAttribute("userName"));
         return modelAndView;
      }
-     @GetMapping("/landing/{userId}")
-     public RedirectView landing(@PathVariable("userId") String  userId, HttpSession session){
+     @GetMapping("/landing/{userId}/{userName}")
+     public RedirectView landing(@PathVariable("userId") String  userId, @PathVariable("userName") String  userName, HttpSession session){
         session.setAttribute("userId",userId);
+        session.setAttribute("userName",userName);
         return new RedirectView("http://localhost:9000/room/roomHome");
      }
      @GetMapping("/logout")

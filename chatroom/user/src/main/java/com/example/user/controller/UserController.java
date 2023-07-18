@@ -4,11 +4,9 @@ import com.example.user.dto.UserDto;
 import com.example.user.entity.User;
 import com.example.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.bouncycastle.math.raw.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
@@ -18,14 +16,31 @@ import java.util.Date;
 public class UserController {
     @Autowired
     UserService service;
+    @GetMapping("/create")
+    public ModelAndView createFrom(){
+        return new ModelAndView("createAccount");
+    }
     @PostMapping("/create")
-    public void createUser(HttpServletRequest request){
+    public ModelAndView createUser(HttpServletRequest request){
         String name = request.getParameter("userName");
-        String description = request.getParameter("description");
+        String description = request.getParameter("userDescription");
         String password = request.getParameter("password");
         UserDto userDto = new UserDto(name,description,password,new Date());
-        service.saveUser(userDto);
+        try {
+            service.saveUser(userDto);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return  new ModelAndView("login");
     }
+
+    @GetMapping("/checkUserNameAvailability")
+    public boolean checkUserNameAvailability(@RequestParam("userName") String userName) {
+        // Perform the check using your service method or repository
+        return service.isUserNameTaken(userName);
+    }
+
     @GetMapping("/login")
     public ModelAndView showLogin(){
         return new ModelAndView("login");
