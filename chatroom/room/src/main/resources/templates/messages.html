@@ -45,6 +45,7 @@
                                 <input type="text" class="form-control" placeholder="Type message"
                                        aria-label="Recipient's username" aria-describedby="button-addon2"
                                         id="messageText" name="messageText"/>
+
                                 <button class="btn btn-warning" type="button" id="button-addon2" style="padding-top: .55rem;">
                                     Button
                                 </button>
@@ -58,6 +59,7 @@
     </div>
 </section>
 <input type="hidden" th:value="${roomId}" id="room">
+<input type="hidden" id="idHolder" th:value="${userId}">
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -70,13 +72,14 @@
 $(document).ready(function (){
 
     var roomId = $("#room").val();
-
+    var userId = $("#idHolder").val();
+    console.log(userId);
     $('#button-addon2').click(function (){
         let message = $("#messageText").val();
         console.log(message);
 
         $.ajax({
-            url: '/message/save?roomId='+roomId,
+            url: '/message/save?roomId=' + roomId + "&userId=" + userId,
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({text: message}),
@@ -102,7 +105,6 @@ $(document).ready(function (){
             success: function (response) {
                 $("#messageBody").empty();
                 for (const message of response){
-                    console.log(message)
                     messageBuilder(message['userName'],message['time'],message['message'])
                 }
 
