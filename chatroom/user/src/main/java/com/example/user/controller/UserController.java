@@ -16,7 +16,7 @@ import java.util.Date;
 public class UserController {
     @Autowired
     UserService service;
-    @GetMapping("/create")
+    @GetMapping("/createAccount")
     public ModelAndView createFrom(){
         return new ModelAndView("createAccount");
     }
@@ -45,6 +45,12 @@ public class UserController {
     public ModelAndView showLogin(){
         return new ModelAndView("login");
     }
+    @GetMapping("/login/{errorCode}")
+    public ModelAndView showLoginWithError(@PathVariable("errorCode")int errorCode ){
+        ModelAndView modelAndView = new ModelAndView("login");
+        modelAndView.addObject("errorCode", errorCode);
+        return modelAndView;
+    }
     @PostMapping("/login")
     public ModelAndView validateUser(HttpServletRequest request){
         User user = service.checkUser(request.getParameter("userName"),request.getParameter("password"));
@@ -54,6 +60,8 @@ public class UserController {
             return modelAndView;
         }
         System.out.println("Error");
-        return null;
+        ModelAndView modelAndView = new  ModelAndView("login");
+        modelAndView.addObject("errorCode", 1);
+        return modelAndView;
     }
 }

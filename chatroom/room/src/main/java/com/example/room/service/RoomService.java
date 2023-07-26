@@ -62,6 +62,15 @@ public class RoomService {
         }
         return true;
     }
+    public Boolean saveRoomUser(RoomUser roomUser){
+        try{
+            roomUserRepository.save(roomUser);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
     public void joinRoom(int userId, int roomId){
         RoomUser roomUser = new RoomUser(roomId,userId,new Date());
         try {
@@ -102,5 +111,13 @@ public class RoomService {
         }
 
         return messagesDto;
+    }
+    public List<Room> getRoomsCreatedByUser(int userId){
+        List<RoomUser> rooms = roomUserRepository.getRoomsCreatedByUser(userId);
+        List<Room> roomList = new ArrayList<>();
+        for (RoomUser room : rooms){
+            roomList.add(roomRepository.getRoomByRoomId(room.getRoomId()));
+        }
+        return roomList;
     }
 }

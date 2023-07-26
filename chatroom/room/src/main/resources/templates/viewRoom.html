@@ -25,10 +25,11 @@
             }
         }
     </style>
+    <title>ChatroomX: View Rooms</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">My App</a>
+    <a class="navbar-brand" href="#">ChatroomX</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -36,13 +37,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="/room/roomHome">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
+                <a class="nav-link" href="/room/createRoom">Create Room</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
+                <a class="nav-link" href="/room/userRooms">Your Rooms</a>
             </li>
         </ul>
     </div>
@@ -51,7 +52,7 @@
 <div class="container">
     <h1>Room Details</h1>
     <div class="room-info">
-        <h2 th:text="${room.getRoomName()}">Room Title</h2>
+        <h2 th:text="${room.getRoomName()}" id="roomName">Room Title</h2>
         <p th:text="${room.getRoomDescription()}"></p>
         <p th:text="${room.getCreatedDate()}"></p>
         <button class="btn btn-primary">Join Room</button>
@@ -69,7 +70,8 @@
     $(document).ready(function (){
         $("#openChat").click(function (){
             let roomId = $(this).data('room-id');
-            $(location).prop('href','/room/chat/'+roomId);
+            let roomName = $('#roomName').text()
+            $(location).prop('href','/room/chat/' + roomId + '/' + roomName);
         })
     })
 </script>

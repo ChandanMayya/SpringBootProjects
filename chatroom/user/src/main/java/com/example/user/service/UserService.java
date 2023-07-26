@@ -27,9 +27,13 @@ public class UserService {
     }
     public User checkUser(String userName, String password){
         User user = repository.findByUserName(userName);
-        if (user.getPassword().equals(password))
-            return user;
-        return  null;
+        try{
+            if (user.getPassword().equals(password))
+                return user;
+        }catch (NullPointerException ex){
+            return null;
+        }
+        return null;
     }
 
     public boolean isUserNameTaken(String userName) {

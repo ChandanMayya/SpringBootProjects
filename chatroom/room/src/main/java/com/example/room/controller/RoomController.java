@@ -3,6 +3,7 @@ package com.example.room.controller;
 import com.example.room.dto.MessageDto;
 import com.example.room.dto.RoomDto;
 import com.example.room.entity.Room;
+import com.example.room.entity.RoomUser;
 import com.example.room.service.RoomService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -129,14 +130,18 @@ public class RoomController {
         ModelAndView modelAndView = new ModelAndView();
         flag = service.saveRoom(roomDto);
         if (flag){
-            modelAndView.setViewName("roomHome");
-            return modelAndView;
+            RoomUser roomUser = new RoomUser(roomDto.getRoomId(), userId, new Date() );
+            flag = service.saveRoomUser(roomUser);
+            if (flag) {
+                modelAndView.setViewName("roomHome");
+                return modelAndView;
+            }
         }
         System.out.println("Error in saving room!");
         return null;
      }
-     @GetMapping("/chat/{roomId}")
-     public ModelAndView message(@PathVariable("roomId") int roomId, HttpServletRequest request, Model model,HttpSession session){
+     @GetMapping("/chat/{roomId}/{roomName}")
+     public ModelAndView message(@PathVariable("roomId") int roomId, @PathVariable("roomName") String roomName, HttpServletRequest request, Model model,HttpSession session){
         //session.setAttribute("roomId",request.getParameter("roomId"));
         //session.setAttribute("roomId",1001);
          int userId = -1;
@@ -151,9 +156,10 @@ public class RoomController {
          if (userId == -1){
              return new ModelAndView("redirect:http://localhost:9000/user/login?formRoom=" + true);
          }
-          List<MessageDto> messages = service.getMessage(roomId);
+         List<MessageDto> messages = service.getMessage(roomId);
         ModelAndView modelAndView = new ModelAndView("messages");
         model.addAttribute("messages", messages);
+        model.addAttribute("roomName", roomName);
         model.addAttribute("roomId", roomId);
         model.addAttribute("userId", userId);
         model.addAttribute("userName",session.getAttribute("userName"));
@@ -169,5 +175,28 @@ public class RoomController {
     public RedirectView logout(HttpSession session){
         session.removeAttribute("userId");
         return new RedirectView("http://localhost:9000/user/login");
+     }
+     @GetMapping("/create")
+    public ModelAndView createRoom(){
+        return new ModelAndView("createRoom");
+     }
+     @GetMapping("/userRooms")
+    public ModelAndView userRooms(HttpSession session){
+         int userId = -1;
+         try {
+             if (Integer.parseInt( (String) session.getAttribute("userId")) > 0)
+                 userId = Integer.parseInt( (String) session.getAttribute("userId"));
+
+         }catch (NumberFormatException ex){
+             return new ModelAndView("redirect:http://localhost:9000/user/login?formRoom=" + true);
+         }
+
+         if (userId == -1){
+             return new ModelAndView("redirect:http://localhost:9000/user/login?formRoom=" + true);
+         }
+         ModelAndView modelAndView = new ModelAndView("userRooms");
+         List<Room> rooms = service.getRoomsCreatedByUser(userId);
+         modelAndView.addObject("rooms", rooms);
+         return new ModelAndView("userRooms");
      }
 }

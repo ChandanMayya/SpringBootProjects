@@ -34,7 +34,7 @@ public class MessageService {
             messageDto1.setUserId(message.getUserId());
             messageDto1.setMessage(message.getMessageTxt());
            // date = ;
-            messageDto1.setTime(outputFormat.parse(String.valueOf(inputFormat.parse(String.valueOf(message.getLoggedTime())))));
+            messageDto1.setTime(message.getLoggedTime());
             messageDto1.setUserName(userRepository.fetchUserById(message.getUserId()).getUserName());
             messageDto.add(messageDto1);
         }
