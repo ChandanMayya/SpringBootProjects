@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface RoomUserRepository extends JpaRepository<RoomUser, Integer> {
     @Query("SELECT r.roomId from RoomUser r where r.userId = :userId")
-    List<RoomUser> getRoomsCreatedByUser(@Param("userId")int id);
+    List<Integer> getRoomsCreatedByUser(@Param("userId")int id);
 }

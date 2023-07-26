@@ -66,21 +66,21 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item ">
+                <a class="nav-link" href="/room/roomHome">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/room/create">Create</a>
+            </li>
             <li class="nav-item active">
-                <a class="nav-link" href="roomHome.html">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="createRoom.html">Create</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="userRooms.html">Your Rooms</a>
+                <a class="nav-link" href="/room/userRooms">Your Rooms</a>
             </li>
         </ul>
     </div>
 </nav>
 
 <div class="container">
-    <div class="align-items-center">
+    <div class="align-items-center" style="display: flex; justify-content: center; text-align: center">
         <h1>Rooms created by you</h1>
     </div>
     <div class="button-container">
@@ -90,15 +90,15 @@
         </div>
     </div>
     <br>
-    <div class="align-items-center">
-        <h1>Rooms previously joined</h1>
-    </div>
-    <div class="button-container">
-        <div class="button" th:each="room : ${rooms}" th:onclick="|window.location.href='/room/view/${room.roomId}'|">
-            <h1 class="large-heading" th:text="${room.getRoomName()}"></h1>
-            <h2 class="small-heading" th:text="${room.getRoomDescription()}"></h2>
-        </div>
-    </div>
+<!--    <div class="align-items-center"  style="display: flex; justify-content: center; text-align: center">-->
+<!--        <h1>Rooms previously joined</h1>-->
+<!--    </div>-->
+<!--    <div class="button-container">-->
+<!--        <div class="button" th:each="room : ${rooms}" th:onclick="|window.location.href='/room/view/${room.roomId}'|">-->
+<!--            <h1 class="large-heading" th:text="${room.getRoomName()}"></h1>-->
+<!--            <h2 class="small-heading" th:text="${room.getRoomDescription()}"></h2>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 
 <script>

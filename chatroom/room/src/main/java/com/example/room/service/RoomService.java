@@ -48,19 +48,20 @@ public class RoomService {
     public Room viewRoom(int id){
         return roomRepository.findById(id).orElse(null);
     }
-    public Boolean saveRoom(RoomDto roomDto){
+    public int saveRoom(RoomDto roomDto){
+        Room room;
         try {
-            Room room = new Room(
+            room = new Room(
                     roomDto.getRoomName(),
                     roomDto.getRoomDescription(),
                     roomDto.getCreatedDate()
             );
-            roomRepository.save(room);
+            room = roomRepository.save(room);
         }catch (Exception e){
             e.printStackTrace();
-            return false;
+            return -1;
         }
-        return true;
+        return room.getRoomId();
     }
     public Boolean saveRoomUser(RoomUser roomUser){
         try{
@@ -113,10 +114,10 @@ public class RoomService {
         return messagesDto;
     }
     public List<Room> getRoomsCreatedByUser(int userId){
-        List<RoomUser> rooms = roomUserRepository.getRoomsCreatedByUser(userId);
+        List<Integer> rooms = roomUserRepository.getRoomsCreatedByUser(userId);
         List<Room> roomList = new ArrayList<>();
-        for (RoomUser room : rooms){
-            roomList.add(roomRepository.getRoomByRoomId(room.getRoomId()));
+        for (Integer roomId : rooms){
+            roomList.add(roomRepository.getRoomByRoomId(roomId));
         }
         return roomList;
     }

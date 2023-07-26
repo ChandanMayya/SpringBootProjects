@@ -127,10 +127,11 @@ public class RoomController {
         String roomDescription = request.getParameter("roomDescription");
         RoomDto roomDto = new RoomDto(roomName,roomDescription,new Date());
         Boolean flag = false;
+        int roomId = -1;
         ModelAndView modelAndView = new ModelAndView();
-        flag = service.saveRoom(roomDto);
-        if (flag){
-            RoomUser roomUser = new RoomUser(roomDto.getRoomId(), userId, new Date() );
+        roomId = service.saveRoom(roomDto);
+        if (roomId != -1){
+            RoomUser roomUser = new RoomUser(roomId, userId, new Date());
             flag = service.saveRoomUser(roomUser);
             if (flag) {
                 modelAndView.setViewName("roomHome");
@@ -197,6 +198,6 @@ public class RoomController {
          ModelAndView modelAndView = new ModelAndView("userRooms");
          List<Room> rooms = service.getRoomsCreatedByUser(userId);
          modelAndView.addObject("rooms", rooms);
-         return new ModelAndView("userRooms");
+         return modelAndView;
      }
 }
