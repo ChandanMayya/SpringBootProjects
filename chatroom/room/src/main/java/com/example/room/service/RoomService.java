@@ -22,10 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Component
@@ -42,11 +39,17 @@ public class RoomService {
     }
 
     public List<Room> listRooms(){
-        List<Room> rooms = roomRepository.findAll();
-        return rooms;
+        return roomRepository.findAll();
     }
-    public Room viewRoom(int id){
-        return roomRepository.findById(id).orElse(null);
+    public Room viewRoom(int id) throws ParseException {
+        Room room = roomRepository.findById(id).orElse(null);
+        String pattern = "dd-MM-yyyy HH:mm:ss";
+        SimpleDateFormat format = new SimpleDateFormat(pattern, new Locale("en", "IN"));
+        assert room != null;
+        String  dateStr = format.format(room.getCreatedDate());
+        room.setCreatedDate(format.parse(dateStr));
+        System.out.println(room.getCreatedDate());
+        return room;
     }
     public int saveRoom(RoomDto roomDto){
         Room room;
@@ -120,5 +123,26 @@ public class RoomService {
             roomList.add(roomRepository.getRoomByRoomId(roomId));
         }
         return roomList;
+    }
+
+    public boolean checkRoomForUser(int userId, int roomId){
+        List<Integer> rooms = roomUserRepository.getRoomsCreatedByUser(userId);
+        for (Integer roomID : rooms){
+            if (roomID == roomId)
+                return true;
+        }
+        return false;
+    }
+
+    public boolean deleteRoomById(int roomId){
+        try {
+            Room room = roomRepository.getRoomByRoomId(roomId);
+            room.setDeleted(true);
+            roomRepository.save(room);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

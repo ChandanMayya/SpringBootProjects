@@ -25,9 +25,18 @@ public class Room {
     private String roomDescription;
     @Column(name = "CREATED_DATE")
     private Date createdDate;
+    @Column(name = "deleted")
+    private Boolean deleted = false;
     public Room(String roomName, String roomDescription, Date createdDate){
         this.createdDate = createdDate;
         this.roomDescription = roomDescription;
         this.roomName = roomName;
+    }
+    public boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

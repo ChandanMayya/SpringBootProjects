@@ -14,3 +14,5 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
     @Query("SELECT r FROM Room r where r.roomId = :roomId")
     Room getRoomByRoomId(@Param("roomId") Integer id);
 }
+
+//Add deleted condetion

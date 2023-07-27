@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.text.ParseException;
 import java.util.*;
 
 @RestController
@@ -50,7 +51,7 @@ public class RoomController {
         return modelAndView;
     }
     @GetMapping("/view/{roomId}")
-    public ModelAndView viewRoom(@PathVariable("roomId") int id, HttpServletRequest request, Model model, HttpSession session){
+    public ModelAndView viewRoom(@PathVariable("roomId") int id, HttpServletRequest request, Model model, HttpSession session) throws ParseException {
         int userId = -1;
         try {
             if (Integer.parseInt( (String) session.getAttribute("userId")) > 0)
@@ -67,8 +68,15 @@ public class RoomController {
             System.out.println(session.getAttribute("userName"));
         System.out.println(request.getParameter("roomName"));
         Room room = service.viewRoom(id);
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("viewRoom");
+
+        if (service.checkRoomForUser(userId, id))
+            modelAndView.addObject("owner", true);
+        else
+            modelAndView.addObject("owner", false);
+
         model.addAttribute("room",room);
         return modelAndView;
     }
@@ -143,8 +151,6 @@ public class RoomController {
      }
      @GetMapping("/chat/{roomId}/{roomName}")
      public ModelAndView message(@PathVariable("roomId") int roomId, @PathVariable("roomName") String roomName, HttpServletRequest request, Model model,HttpSession session){
-        //session.setAttribute("roomId",request.getParameter("roomId"));
-        //session.setAttribute("roomId",1001);
          int userId = -1;
          try {
              if (Integer.parseInt( (String) session.getAttribute("userId")) > 0)
@@ -199,5 +205,25 @@ public class RoomController {
          List<Room> rooms = service.getRoomsCreatedByUser(userId);
          modelAndView.addObject("rooms", rooms);
          return modelAndView;
+     }
+     @GetMapping("/delete/{roomId}")
+    public ModelAndView deleteRoom(HttpSession session, @PathVariable("roomId") int roomId){
+         int userId = -1;
+         try {
+             if (Integer.parseInt( (String) session.getAttribute("userId")) > 0)
+                 userId = Integer.parseInt( (String) session.getAttribute("userId"));
+
+         }catch (NumberFormatException ex){
+             return new ModelAndView("redirect:http://localhost:9000/user/login?formRoom=" + true);
+         }
+
+         if (userId == -1){
+             return new ModelAndView("redirect:http://localhost:9000/user/login?formRoom=" + true);
+         }
+         if (service.checkRoomForUser(userId, roomId))
+             if (service.deleteRoomById(roomId)){
+                 return new ModelAndView("roomHome");
+             }
+         return null;
      }
 }
