@@ -19,11 +19,11 @@ public class MessageService {
     MessageRepository repository;
     @Autowired
     UserRepository userRepository;
+
+    SimpleDateFormat sdf;
     public List<MessageDto> messageList(int roomId) throws ParseException {
 
-        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy @ hh-mm a");
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        Date date;
+        sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
         List<Message> messagesList = repository.findAllByRoomIdAndUserId(roomId);
         List<MessageDto> messageDto = new ArrayList<>();
@@ -33,8 +33,7 @@ public class MessageService {
             messageDto1.setRoomId(message.getRoomId());
             messageDto1.setUserId(message.getUserId());
             messageDto1.setMessage(message.getMessageTxt());
-           // date = ;
-            messageDto1.setTime(message.getLoggedTime());
+            messageDto1.setTime(sdf.format(message.getLoggedTime()));
             messageDto1.setUserName(userRepository.fetchUserById(message.getUserId()).getUserName());
             messageDto.add(messageDto1);
         }
@@ -47,7 +46,7 @@ public class MessageService {
                     messageDto.getRoomId(),
                     messageDto.getUserId(),
                     messageDto.getMessage(),
-                    messageDto.getTime()
+                   new Date()
             );
             repository.save(message);
 

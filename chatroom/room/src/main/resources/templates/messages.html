@@ -5,40 +5,39 @@
     <title>Room</title>
 </head>
 <body>
-<div class="container-fluid">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">ChatroomX</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/room/roomHome">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/room/create">Create Room</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/room/userRooms">Your Rooms</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">ChatroomX</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/room/roomHome">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/room/createRoom">Create Room</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/room/userRooms">Your Rooms</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
 <section style="background-color: #eee;">
     <div class="container py-5">
 
         <div class="row d-flex justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-6">
+            <div class="col-md-8 col-lg-6 col-xl-4">
 
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center p-3"
                          style="border-top: 4px solid #ffa900;">
                         <h5 class="mb-0">ChatRoomX</h5>
                         <div class="d-flex flex-row align-items-center">
-                            <span class="badge bg-warning me-3"><label th:value="${userName}"></label> </span>
+                            <span class="badge bg-warning me-3"><label th:text="${userName}"></label> </span>
                             <i class="fas fa-minus me-3 text-muted fa-xs"></i>
                             <i class="fas fa-comments me-3 text-muted fa-xs"></i>
                             <i class="fas fa-times text-muted fa-xs"></i>
@@ -47,7 +46,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center p-3">
                         <h6 class="mb-0" th:text="${roomName}"></h6>
                     </div>
-                    <div class="card-body overflow-scroll hover-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 450px; flex-direction: column-reverse;" id="messageBody">
+                    <div class="card-body overflow-scroll hover-scroll"  style="position: relative; height: 400px;" id="messageBody">
 
 <!--                    <span th:each="message : *{messages}">-->
 
@@ -150,13 +149,7 @@ $(document).ready(function (){
     //
     //     })
     // }
-    function scrollToBottom() {
-        const messageBody = document.getElementById('messageBody');
-        messageBody.scrollTop = messageBody.scrollHeight;
-    }
 
-    // Call the scrollToBottom function when the page loads
-    window.onload = scrollToBottom;
 
 });
 </script>

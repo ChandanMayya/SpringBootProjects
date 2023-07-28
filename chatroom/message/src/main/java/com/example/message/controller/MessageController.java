@@ -28,7 +28,7 @@ public class MessageController {
     @PostMapping("/save")
     public void saveMessage(@RequestParam("roomId") int rId, @RequestParam("userId") int userId, @RequestBody TextRequest textRequest , HttpServletRequest request, HttpSession session){
         String messageTxt = textRequest.getText();
-        MessageDto message = new MessageDto(rId,userId,"Dummy",messageTxt,new Date());
+        MessageDto message = new MessageDto(rId,userId,"Dummy",messageTxt,String.valueOf(new Date()));
         if (service.saveMessage(message))
             System.out.println("Success");
         else

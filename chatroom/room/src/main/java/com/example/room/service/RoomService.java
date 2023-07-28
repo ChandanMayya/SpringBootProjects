@@ -111,7 +111,7 @@ public class RoomService {
                 messagesDto.add(message);
             }
         } catch (ParseException | JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         return messagesDto;
@@ -120,7 +120,9 @@ public class RoomService {
         List<Integer> rooms = roomUserRepository.getRoomsCreatedByUser(userId);
         List<Room> roomList = new ArrayList<>();
         for (Integer roomId : rooms){
-            roomList.add(roomRepository.getRoomByRoomId(roomId));
+            Room tempRoom = roomRepository.getRoomByRoomId(roomId,false);
+            if (tempRoom != null)
+                roomList.add(tempRoom);
         }
         return roomList;
     }
@@ -136,7 +138,7 @@ public class RoomService {
 
     public boolean deleteRoomById(int roomId){
         try {
-            Room room = roomRepository.getRoomByRoomId(roomId);
+            Room room = roomRepository.getRoomByRoomId(roomId, false);
             room.setDeleted(true);
             roomRepository.save(room);
         }catch (Exception e){

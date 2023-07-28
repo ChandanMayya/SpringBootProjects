@@ -220,10 +220,12 @@ public class RoomController {
          if (userId == -1){
              return new ModelAndView("redirect:http://localhost:9000/user/login?formRoom=" + true);
          }
+         ModelAndView modelAndView = new ModelAndView("roomHome");
          if (service.checkRoomForUser(userId, roomId))
              if (service.deleteRoomById(roomId)){
-                 return new ModelAndView("roomHome");
+                 return modelAndView;
              }
-         return null;
+         modelAndView.addObject("errorCode","2");
+         return modelAndView;
      }
 }

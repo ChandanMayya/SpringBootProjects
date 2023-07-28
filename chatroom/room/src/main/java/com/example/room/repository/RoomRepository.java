@@ -11,8 +11,6 @@ import java.util.List;
 public interface RoomRepository extends JpaRepository<Room, Integer> {
 //    @Query("SELECT  roomName,roomDescription  FROM Room ")
 //    List<RoomDto> findRoomNameAndDescription();
-    @Query("SELECT r FROM Room r where r.roomId = :roomId")
-    Room getRoomByRoomId(@Param("roomId") Integer id);
+    @Query("SELECT r FROM Room r where r.roomId = :roomId and r.deleted =:deleted")
+    Room getRoomByRoomId(@Param("roomId") Integer id, @Param("deleted") boolean deleted);
 }
-
-//Add deleted condetion
