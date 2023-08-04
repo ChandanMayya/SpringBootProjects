@@ -1,12 +1,130 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Room</title>
+    <style>
+        /* Center align the content */
+        .container {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        /* Add border to the content */
+        .room-info {
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Adjust styles for smaller screens */
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 50px;
+            }
+        }
+    </style>
+    <title>ChatroomX: View Rooms</title>
 </head>
 <body>
-ViewRoom
-<p th:text="${room}"></p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">ChatroomX</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/room/roomHome">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/room/createRoom">Create Room</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/room/userRooms">Your Rooms</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="room-panel container " >
+        <div style="display:flex;justify-content: center;text-align: center; padding-top: 5px; padding-bottom: 5px">
+            <h1>Room Details</h1>
+        </div>
+        <div style="display: flex; justify-content: center; text-align: center; padding-top: 5px; padding-bottom: 5px;">
+            <h2 th:text="${room.getRoomName()}" id="roomName">Room Title</h2>
+        </div>
+        <div style="display: flex; justify-content: center; text-align: center; padding-top: 5px; padding-bottom: 5px;">
+            <p>Description:&nbsp;&nbsp;&nbsp;</p><p th:text="${room.getRoomDescription()}"></p>
+        </div>
+        <div style="display: flex; justify-content: center; text-align: center; padding-top: 5px; padding-bottom: 5px;">
+            <p>Created On:&nbsp;&nbsp;&nbsp;</p><p th:text="${room.getCreatedDate()}"></p>
+        </div>
+        <div style="display: flex; justify-content: center; text-align: center; padding-top: 5px; padding-bottom: 5px;">
+            <div class="row">
+                <div class="col col-6">
+                    <button class="btn btn-danger" id="deleteBtn" style="background-color: tomato;"th:attr="data-room-id=${room.getRoomId()}">Delete</button>
+                </div>
+                <div class="col col-6">
+                    <button class="btn btn-secondary" id="openChat" style="background-color: #ff6e24;" th:attr="data-room-id=${room.getRoomId()}">Open</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:if="${owner}">
+    <p th:text = "${owner}" id="userType"></p>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 </body>
 </html>
+<script>
+    $(document).ready(function (){
+        let deleteBtn = $("#deleteBtn");
+         deleteBtn.hide();
+
+        var owner = $("#userType");
+        owner.hide();
+
+        if (owner.text() == "true"){
+            deleteBtn.show();
+        }
+
+        deleteBtn.click(function (){
+            let roomId = $(this).data('room-id');
+            $(location).prop('href','/room/delete/' + roomId)
+        })
+
+        $("#openChat").click(function (){
+            let roomId = $(this).data('room-id');
+            let roomName = $('#roomName').text()
+            $(location).prop('href','/room/chat/' + roomId + '/' + roomName);
+        })
+    })
+</script>
+<style>
+    .room-panel {
+        max-width: 400px;
+        margin: 0 auto;
+        margin-top: 100px;
+        padding: 20px;
+        /*border: 1px solid #ccc;*/
+        border-radius: 5px;
+        background-color: #f8f9fa;
+        border: 2px solid black;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    }
+    .room-panel h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .subBut{
+
+    }
+</style>

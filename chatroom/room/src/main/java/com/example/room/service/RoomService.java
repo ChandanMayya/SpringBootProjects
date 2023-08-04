@@ -22,10 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Component
@@ -42,20 +39,36 @@ public class RoomService {
     }
 
     public List<Room> listRooms(){
-        List<Room> rooms = roomRepository.findAll();
-        return rooms;
+        return roomRepository.findAll();
     }
-    public Room viewRoom(int id){
-        return roomRepository.findById(id).orElse(null);
+    public Room viewRoom(int id) throws ParseException {
+        Room room = roomRepository.findById(id).orElse(null);
+        String pattern = "dd-MM-yyyy HH:mm:ss";
+        SimpleDateFormat format = new SimpleDateFormat(pattern, new Locale("en", "IN"));
+        assert room != null;
+        String  dateStr = format.format(room.getCreatedDate());
+        room.setCreatedDate(format.parse(dateStr));
+        System.out.println(room.getCreatedDate());
+        return room;
     }
-    public Boolean saveRoom(RoomDto roomDto){
+    public int saveRoom(RoomDto roomDto){
+        Room room;
         try {
-            Room room = new Room(
+            room = new Room(
                     roomDto.getRoomName(),
                     roomDto.getRoomDescription(),
                     roomDto.getCreatedDate()
             );
-            roomRepository.save(room);
+            room = roomRepository.save(room);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return room.getRoomId();
+    }
+    public Boolean saveRoomUser(RoomUser roomUser){
+        try{
+            roomUserRepository.save(roomUser);
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -71,12 +84,16 @@ public class RoomService {
         }
     }
     public List<MessageDto> getMessage(int roomId){
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy @ hh-mm a");
+
+        Date date;
+
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<String > responseEntity = restTemplate.exchange("http://localhost:9000/message/pull/{roomId}", HttpMethod.GET,requestEntity, String.class,roomId);
         String responseBody = responseEntity.getBody();
-//        assert responseBody != null;
-//        System.out.println(Arrays.toString(responseBody.split(",")));
         List<MessageDto> messagesDto = new ArrayList<>();
 
         try{
@@ -88,18 +105,46 @@ public class RoomService {
                 message.setId(jsonObject.get("id").asInt());
                 message.setRoomId(jsonObject.get("roomId").asInt());
                 message.setUserName(jsonObject.get("userName").asText());
+                date = inputFormat.parse(jsonObject.get("time").asText());
                 message.setMessage(jsonObject.get("message").asText());
-                message.setTime(jsonObject.get("time").asText());
+                message.setTime(outputFormat.format(date));
                 messagesDto.add(message);
             }
-        } catch (JsonMappingException e) {
-            throw new RuntimeException(e);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-//       } catch (ParseException e) {
-//            throw new RuntimeException(e);
-       }
+        } catch (ParseException | JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         return messagesDto;
+    }
+    public List<Room> getRoomsCreatedByUser(int userId){
+        List<Integer> rooms = roomUserRepository.getRoomsCreatedByUser(userId);
+        List<Room> roomList = new ArrayList<>();
+        for (Integer roomId : rooms){
+            Room tempRoom = roomRepository.getRoomByRoomId(roomId,false);
+            if (tempRoom != null)
+                roomList.add(tempRoom);
+        }
+        return roomList;
+    }
+
+    public boolean checkRoomForUser(int userId, int roomId){
+        List<Integer> rooms = roomUserRepository.getRoomsCreatedByUser(userId);
+        for (Integer roomID : rooms){
+            if (roomID == roomId)
+                return true;
+        }
+        return false;
+    }
+
+    public boolean deleteRoomById(int roomId){
+        try {
+            Room room = roomRepository.getRoomByRoomId(roomId, false);
+            room.setDeleted(true);
+            roomRepository.save(room);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

@@ -17,11 +17,11 @@ public class MessageDto {
     private int userId;
     private String userName;
     private String message;
-    private Date time;
+    private String time;
 
     public MessageDto(int id, int roomId, int userId, String messageTxt, Date date) {
     }
-    public MessageDto(int roomId,int userId, String userName, String message, Date time){
+    public MessageDto(int roomId,int userId, String userName, String message, String time){
         this.roomId = roomId;
         this.userId = userId;
         this.userName = userName;

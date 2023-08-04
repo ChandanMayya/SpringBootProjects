@@ -5,6 +5,27 @@
     <title>Room</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">ChatroomX</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/room/roomHome">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/room/createRoom">Create Room</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/room/userRooms">Your Rooms</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
 <section style="background-color: #eee;">
     <div class="container py-5">
 
@@ -14,15 +35,18 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center p-3"
                          style="border-top: 4px solid #ffa900;">
-                        <h5 class="mb-0">Chat messages</h5>
+                        <h5 class="mb-0">ChatRoomX</h5>
                         <div class="d-flex flex-row align-items-center">
-                            <span class="badge bg-warning me-3">20</span>
+                            <span class="badge bg-warning me-3"><label th:text="${userName}"></label> </span>
                             <i class="fas fa-minus me-3 text-muted fa-xs"></i>
                             <i class="fas fa-comments me-3 text-muted fa-xs"></i>
                             <i class="fas fa-times text-muted fa-xs"></i>
                         </div>
                     </div>
-                    <div class="card-body overflow-scroll hover-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 500px; overflow: auto; flex-direction: column-reverse;" id="messageBody">
+                    <div class="card-header d-flex justify-content-between align-items-center p-3">
+                        <h6 class="mb-0" th:text="${roomName}"></h6>
+                    </div>
+                    <div class="card-body overflow-scroll hover-scroll"  style="position: relative; height: 400px;" id="messageBody">
 
 <!--                    <span th:each="message : *{messages}">-->
 
@@ -38,15 +62,15 @@
 <!--                            </div>-->
 <!--                        </div>-->
 <!--                        </span>-->
-
                     </div>
                     <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
                         <div class="input-group mb-0">
                                 <input type="text" class="form-control" placeholder="Type message"
                                        aria-label="Recipient's username" aria-describedby="button-addon2"
                                         id="messageText" name="messageText"/>
+
                                 <button class="btn btn-warning" type="button" id="button-addon2" style="padding-top: .55rem;">
-                                    Button
+                                    Send
                                 </button>
                         </div>
                     </div>
@@ -57,6 +81,8 @@
 
     </div>
 </section>
+<input type="hidden" th:value="${roomId}" id="room">
+<input type="hidden" id="idHolder" th:value="${userId}">
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -67,12 +93,16 @@
 
 <script th:inline="javascript">
 $(document).ready(function (){
+
+    var roomId = $("#room").val();
+    var userId = $("#idHolder").val();
+    console.log(userId);
     $('#button-addon2').click(function (){
         let message = $("#messageText").val();
         console.log(message);
 
         $.ajax({
-            url: '/message/save',
+            url: '/message/save?roomId=' + roomId + "&userId=" + userId,
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({text: message}),
@@ -87,7 +117,10 @@ $(document).ready(function (){
     });
 
     var interval = 1000;
-    var roomId = 1001;
+
+
+    console.log(roomId);
+
     function fetchData() {
         $.ajax({
             url: "/message/pull/" + roomId,
@@ -95,10 +128,11 @@ $(document).ready(function (){
             success: function (response) {
                 $("#messageBody").empty();
                 for (const message of response){
-                    console.log(message)
                     messageBuilder(message['userName'],message['time'],message['message'])
                 }
 
+            },error: function (error){
+                console.log(error);
             }
         })
     }
@@ -115,6 +149,8 @@ $(document).ready(function (){
     //
     //     })
     // }
+
+
 });
 </script>
 

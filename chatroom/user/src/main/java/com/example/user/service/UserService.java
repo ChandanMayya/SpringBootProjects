@@ -16,6 +16,7 @@ public class UserService {
             User user = new User(
                     userDto.getUserName(),
                     userDto.getUserDescription(),
+                    userDto.getPassword(),
                     userDto.getJoinedDate()
             );
             repository.save(user);
@@ -23,5 +24,20 @@ public class UserService {
             e.printStackTrace();
             return;
         }
+    }
+    public User checkUser(String userName, String password){
+        User user = repository.findByUserName(userName);
+        try{
+            if (user.getPassword().equals(password))
+                return user;
+        }catch (NullPointerException ex){
+            return null;
+        }
+        return null;
+    }
+
+    public boolean isUserNameTaken(String userName) {
+        User existingUser = repository.findByUserName(userName);
+        return existingUser != null;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.user.entity;
+package com.example.message.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="hidden" th:value="${user.getId()}" id="idHolder">
+<input type="hidden" th:value="${user.getUserName()}" id="nameHolder">
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function (){
+        let userId = $("#idHolder").val()
+        let userName = $("#nameHolder").val()
+        window.location.href = "http://localhost:9000/room/landing/"+userId+"/"+userName;
+    })
+</script>
